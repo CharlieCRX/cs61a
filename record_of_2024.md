@@ -1,5 +1,64 @@
 # just do it日报
 
+# Just Do It.
+
+## 2024.1.22
+
+今日任务：
+
+- [x] 练字半小时
+
+- [x] 数学大纲
+
+- [x] 洗牙
+
+- [x] csapp重做习题
+
+- [x] cs61a查看网站
+
+- [x] 打字练习20分钟
+
+  <img src="C:\Users\crx\AppData\Roaming\Typora\typora-user-images\image-20240122194408527.png" alt="image-20240122194408527" style="zoom:33%;" />
+
+### `size_t`的用法
+
+补充C基础。
+
+之前一直不是很了解为什么`show_bytes`要用`size_t`作为长度单位，代码实例：
+
+```c
+typedef unsigned char *byte_pointer;
+
+void show_bytes(byte_pointer start, size_t len) {
+    size_t i;
+    for (i = 0; i < len; i++)
+	printf(" %.2x", start[i]);    //line:data:show_bytes_printf
+    printf("\n");
+}
+```
+
+然后在《C Primer Plus》中找到了`size_t`的用途。
+
+`sizeof`函数返回的是一个无符号整数，但是并未确定其变量类型。所以不同机器用`sizeof`可能要用unsigned int、unsigned long甚至是unsigned long long类型的变量来存储。
+
+这样会导致的问题首先就是，你想用`printf`打印`sizeof`的表达式，你需要了解自己计算机系统用什么类型数据存储`sizeof`。并且不利于后续的移植开发。
+
+所以C直接定义了一个`sizeof`返回的类型`size_t`，专门用来保存sizeof函数产生的无符号整数变量。此时printf函数使用`z`修饰符表示打印相应的类型。
+
+还是得以权威的工具书为指导啊，查了半天人家几句话就讲明白了。
+
+### 关于Byte Ordering
+
+首先理解最高位字节：一个数据用n位的二进制表示为[wn-1, wn-2, ... , w1,w0]。那么wn-1就是二进制的最高位而w0为最低位。假设n为8的倍数，那么[wn-1, wn-2, ... , wn-8]就是最高位字节。
+
+如果一个系统从数据的最高位字节开始存储（地址从低到高），一直存到数据的最低位字节，那么这个系统就是“大端”存储类型。所以如果想要检测下自己的系统是哪种类型存储数据的，最简单的方法就是按字节输出int类的变量0x12345678。
+
+如果输出结果为12 34 56 78，那么大端存储。如果结果为78 56 34 12，那么小端存储。
+
+## 1.23
+
+今天突然想回去，但是csapp。有没有一种可能，就是csapp并不影响你回去？是的，只需要有电脑就好了。
+
 ## 1.25
 
 今日学习下cs61a的课程大纲，了解下课程的培养目标。
@@ -1049,3 +1108,108 @@ int main(int argc, char* argv[]) {
 昨日烦恼的超哥来到了这里，祝愿兄弟能一切顺利吧。
 
 hog的项目来到了问题8。
+
+## 2.18
+
+早起跑步10km，跑到水闸附近有股鱼腥味。
+
+## 2.19
+
+在写`def make_averaged(original_function, samples_count=1000):`函数的时候，发现函数很容易实现，但是加入实际的情景就没法理解。现在在这里记录下自己遇到的问题：
+
+### Problem 8 (2 pt)问题描述	
+
+> Implement `make_averaged`, which is a higher-order function that takes a function `original_function` as an argument.
+>
+> The return value of `make_averaged` is a function that takes in the same number of arguments as `original_function`. When we call this returned function on the arguments, it will return the average value of repeatedly calling `original_function` on the arguments passed in.
+>
+> Specifically, this function should call `original_function` a total of `samples_count` times and return the average of the results of these calls.
+
+### 问题解析
+
+这个问题其实很简单。`make_averaged`函数接受两个参数：
+
+1. `original_function`：接受n个参数，返回一个值
+2. `samples_count`：重复调用函数A的次数
+
+接受了两个入参后，返回一个函数（高阶函数，将函数作为返回值）。这个函数接受的参数与`original_function`接受的参数相同。调用这个新函数的时候，会返回重复调用`samples_count`次`original_function`的值。
+
+### 疑问
+
+但是在检测自己是否理解这个函数（`python3 ok -q 08 -u`）的选项中，对于这个问题我总是答错：
+
+```python
+>>> from hog import *
+>>> dice = make_test_dice(3, 1, 5, 6)
+>>> averaged_roll_dice = make_averaged(roll_dice, 1000)
+>>> # Average of calling roll_dice 1000 times
+>>> # Enter a float (e.g. 1.0) instead of an integer
+>>> averaged_roll_dice(2, dice)
+?
+```
+
+在我理解中，`dice`被定义好后，每次调用`dice`就会指定下一个值，然后循环如此。（这个坑好久之前就被埋好了😒 ）
+
+`roll_dice`呢，就是一个函数，接收投掷总数和骰子类型，返回投多个骰子的总点数（遵循sow sad原则）。
+
+那么既然说这个`make_averaged`函数是重复调用`samples_count`次`original_function`的值，那么就先看看在这里调用一次`original_function`的效果，然后看看重复调用`samples_count`的效果。
+
+1. `roll_dice(2, dice)`：这个函数就是`make_averaged`参数1。这个函数投掷两次骰子，然后算总和。例如第一次投掷两枚骰子，结果分别为3和1，符合“sow sad”原则，所以这次结果为1。
+2. 重复调用`samples_count`次的结果：这就是我卡住的地方，也是需要反思的地方。
+
+### 解决思路
+
+这里因为我并没有深入理解`dice`函数的机制，导致我并不理解重复调用`dice`到底有什么效果。下面贴上`dice`的代码，学习一下嵌套函数如何利用`nonlocal`将修改上一层函数的变量:
+
+```py
+def make_test_dice(*outcomes):
+    """Return a die that cycles deterministically through OUTCOMES.
+
+    >>> dice = make_test_dice(1, 2, 3)
+    >>> dice()
+    1
+    >>> dice()
+    2
+    >>> dice()
+    3
+    >>> dice()
+    1
+    >>> dice()
+    2
+
+    This function uses Python syntax/techniques not yet covered in this course.
+    The best way to understand it is by reading the documentation and examples.
+    """
+    assert len(outcomes) > 0, 'You must supply outcomes to make_test_dice'
+    for o in outcomes:
+        assert type(o) == int and o >= 1, 'Outcome is not a positive integer'
+    index = len(outcomes) - 1
+    def dice():
+        nonlocal index
+        index = (index + 1) % len(outcomes)
+        return outcomes[index]
+    return dice
+```
+
+这里的`dice()`函数中，使用`nonlocal index`的声明，`dice()`可以修改`make_test_dice`的局部变量`index`。
+
+这样代码就好理解了：
+
+```py
+>>> dice = make_test_dice(3, 1, 5, 6)
+```
+
+`dice`每次调用的时候，都会改变`make_test_dice`的局部变量`index`。这样`index`就会循环往复地在`[0, len(outcomes) - 1]`中徘徊。
+
+使用 `nonlocal` 关键字可以指示 Python 解释器在嵌套函数中查找并修改上一层函数的局部变量。
+
+这样再去看`roll_dice(2, dice)`重复调用`samples_count`次的结果：第一次投掷两个骰子，结果分别为3和1，得分为1；第二次投掷两个骰子，结果分别为5和6，得分为11；第三次投掷两个骰子，结果分别为3和1，得分为1...
+
+这样重复调用的结果就是1和11，重复1000次的平均值就是（1 * 500 +11 * 500） / 1000  = 6.0。
+
+### 总结
+
+1. 请读源码：调用函数解决问题前，需要详细理解每一个函数到底做了什么。
+2. 遇到问题：那肯定是你代码没弄明白又或者是出现了bug，请再次重新回顾代码，做到详尽理解和测试。
+3. 偷懒被教育：`nonlocal`关键字懒得查，注释` This function uses Python syntax/techniques not yet covered in this course.
+       The best way to understand it is by reading the documentation and examples.`也懒得理解，最终导致了让我跌了个跟头。而这个坑又是自信的我亲手埋下的。
