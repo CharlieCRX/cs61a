@@ -1213,3 +1213,85 @@ def make_test_dice(*outcomes):
 2. 遇到问题：那肯定是你代码没弄明白又或者是出现了bug，请再次重新回顾代码，做到详尽理解和测试。
 3. 偷懒被教育：`nonlocal`关键字懒得查，注释` This function uses Python syntax/techniques not yet covered in this course.
        The best way to understand it is by reading the documentation and examples.`也懒得理解，最终导致了让我跌了个跟头。而这个坑又是自信的我亲手埋下的。
+
+## 2.20
+
+一三五七八十腊，三十一天永不差。还有九天，二月份就过完了。
+
+今天想把hog弄完，然后回顾下自己这一个月的优势和不足，整理份书单，阅读。
+
+然后试着看看能否找到一条正常学习csapp的道路？现在这样的学习太累了。（找到累在哪里了？然后怎么解决这个问题）
+
+### 问题9
+
+> Implement `max_scoring_num_rolls`, which runs an experiment to determine the number of rolls (from 1 to 10) that gives the maximum average score for a turn. Your implementation should use `make_averaged` and `roll_dice`.
+>
+> If two numbers of rolls are tied for the maximum average score, return the lower number. For example, if both 3 and 6 achieve a maximum average score, return 3.
+>
+> You might find it useful to read the doctest and the example shown in the doctest for this problem before doing the unlocking test.
+>
+> > **Important:** In order to pass all of our tests, please make sure that you are testing dice rolls starting from 1 going up to 10, rather than from 10 to 1.
+
+函数原型描述：
+
+```py
+def max_scoring_num_rolls(dice=six_sided, samples_count=1000):
+    """Return the number of dice (1 to 10) that gives the highest average turn score
+    by calling roll_dice with the provided DICE a total of SAMPLES_COUNT times.
+    Assume that the dice always return positive outcomes.
+
+    >>> dice = make_test_dice(1, 6)
+    >>> max_scoring_num_rolls(dice)
+    1
+    """
+    # BEGIN PROBLEM 9
+    "*** YOUR CODE HERE ***"
+    # END PROBLEM 9
+```
+
+### 分析
+
+这个函数想实现：给定一个`dice()`，然后确定这个骰子扔多少个（`num_rolls`）才能在函数`make_averaged()`中获取最大平均值。
+
+在这举个例子，看下函数`roll_dice(num_rolls, dice)`以相同的点数策略`dice()`，但是在不同的骰子数量`num_rolls`的影响下，产生的结果。这里先固定下`dice()`函数的策略：
+
+```py
+>>> dice = make_test_dice(3, 1, 5, 6)
+```
+
+然后看下`roll_dice(num_rolls, dice)`在不同的骰子数量`num_rolls`的影响下（这里仅举1、2、3数量，其他数量可以自行推算💦），产生的结果：
+
+1. `num_rolls = 1`：反复调用`roll_dice()`函数，省略各个骰子的结果，可以得到分数分别为：3、1、5、6。各个结果的概率均为1/4。
+2. `num_rolls = 2`：反复调用`roll_dice()`函数，省略各个骰子的结果，分数分别为1、11。得到每个结果的概率为1/2
+3. `num_rolls = 3`：反复调用`roll_dice()`函数，骰子的结果分别为：`3,1,5`、`6,3,1`、`5,6,3`、`1,5,6`、`3,1,5`...这是4个得分循环，每次得分分别为：1、1、14、1。各个结果的概率均为1/4。
+
+这个例子说明，函数`roll_dice(num_rolls, dice)`在相同的点数策略`dice()`，而在不同的骰子数量`num_rolls`的影响下，重复调用会出现完全不一致的结果。这样就会导致函数`make_averaged()`在选用`相同点数策略但是不同骰子数量`的`roll_dice()`时候，得到的结果不一致。
+
+所以要确定：函数`roll_dice(num_rolls, dice)`以相同的点数策略`dice()`，但是以多少骰子数量`num_rolls`才能在函数`make_averaged()`获取到较大的平均值。
+
+### 实现
+
+```py
+def max_scoring_num_rolls(dice=six_sided, samples_count=1000):
+    """Return the number of dice (1 to 10) that gives the highest average turn score
+    by calling roll_dice with the provided DICE a total of SAMPLES_COUNT times.
+    Assume that the dice always return positive outcomes.
+
+    >>> dice = make_test_dice(1, 6)
+    >>> max_scoring_num_rolls(dice)
+    1
+    """
+    # BEGIN PROBLEM 9
+    "*** YOUR CODE HERE ***"
+    i = num_rolls = 1
+    higher_avg_score = 0
+    while i <= 10:
+        avg_score = make_averaged(roll_dice, samples_count)(i, dice)
+        if avg_score > higher_avg_score:
+            higher_avg_score = avg_score
+            num_rolls = i
+        i += 1
+    return num_rolls
+    # END PROBLEM 9
+```
+
