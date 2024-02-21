@@ -1346,8 +1346,6 @@ ok，现在是2024年2月20号15:58分，我该去做晚饭了，一会回来继
 
  `Copy the parent of the function to the local frame: [parent=<label>]`：意思是将`定义原函数的frame`名称作为`<label>`，放在这个`local frame: [parent=<label>]`中。
 
-
-
 下面举个例子（代码来自[1.6  Higher-Order Functions](https://www.composingprograms.com/pages/16-higher-order-functions.html)的`1.6.3  Defining Functions III: Nested Definitions`）：
 
 ```py
@@ -1385,6 +1383,20 @@ result = sqrt(256)
 
 从这个计算`sqrt(256)`的部分，就可以将上面`调用函数和定义函数时候的环境图表`如何画概念理解清晰了。
 
+例子2：
+
+```py
+>>> def cake():
+...    print('beets')
+...    def pie():
+...        print('sweets')
+...        return 'cake'
+...    return pie
+>>> chocolate = cake()
+```
+
+提供一个[Python图形化代码执行过程](https://pythontutor.com/cp/composingprograms.html#mode=edit)的网站，输入代码执行，多尝试一下~😉
+
 ### 修改Python别名
 
 发现课程提供的启动python程序的命令均为`python3`，而我们的环境中只能用`python`来启动 Python 解释器，可以通过修改python的别名来实现不同名称调用同一个程序的效果。
@@ -1412,3 +1424,33 @@ result = sqrt(256)
    如果配置正确，你应该能够看到 Python 的版本信息。
 
 现在，应该能够正常使用 `py`、`py3`、`python3` 以及 `python` 命令调用 Python 解释器。
+
+### [Short Circuiting](https://cs61a.org/lab/lab02/)
+
+| Operator | Checks if:                 | Evaluates from left to right up to: | Example                                |
+| :------- | :------------------------- | :---------------------------------- | :------------------------------------- |
+| AND      | All values are true        | The first false value               | `False and 1 / 0` evaluates to `False` |
+| OR       | At least one value is true | The first true value                | `True or 1 / 0` evaluates to `True`    |
+
+Short-circuiting happens when the operator reaches an operand that allows them to make a conclusion about the expression. For example, `and` will short-circuit as soon as it reaches the first false value because it then knows that not all the values are true.
+
+If `and` and `or` do not *short-circuit*, they just return the last value; another way to remember this is that `and` and `or` always return the last thing they evaluate, whether they short circuit or not. Keep in mind that `and` and `or` don't always return booleans when using values other than `True` and `False`.
+
+#### 举例
+
+```py
+---------------------------------------------------------------------
+The Truth Will Prevail > Suite 2 > Case 2
+(cases remaining: 2)
+
+What would Python display? If you get stuck, try it out in the Python
+interpreter!
+
+>>> print(3) or ""
+```
+
+#### 分析
+
+因为操作符`or`的短路特性，会让这个操作符寻找第一个值为`True`的值。如果左边的值不为`True`，那么就会执行右边的值。
+
+这里`print()`返回为`None`，同等于逻辑`False`。这样`or`便会执行下一个表达式`""`。这样便会输出`''`，即空字符串。
