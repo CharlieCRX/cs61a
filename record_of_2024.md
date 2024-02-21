@@ -1335,3 +1335,52 @@ ok，现在是2024年2月20号15:58分，我该去做晚饭了，一会回来继
 ## cs学习之路
 
 确定大概学习方向和课程。
+
+## 2.21
+
+### How to draw an Environment Diagram
+
+![image-20240221101304130](C:\Users\crx\AppData\Roaming\Typora\typora-user-images\image-20240221101304130.png)
+
+这里解释下打星号的2：
+
+ `Copy the parent of the function to the local frame: [parent=<label>]`：意思是将`定义原函数的frame`名称作为`<label>`，放在这个`local frame: [parent=<label>]`中。
+
+
+
+下面举个例子（代码来自[1.6  Higher-Order Functions](https://www.composingprograms.com/pages/16-higher-order-functions.html)的`1.6.3  Defining Functions III: Nested Definitions`）：
+
+```py
+def average(x, y):
+    return (x + y)/2
+
+def improve(update, close, guess=1):
+    while not close(guess):
+        guess = update(guess)
+    return guess
+
+def approx_eq(x, y, tolerance=1e-3):
+    return abs(x - y) < tolerance
+
+def sqrt(a):
+    def sqrt_update(x):
+        return average(x, a/x)
+    def sqrt_close(x):
+        return approx_eq(x * x, a)
+    return improve(sqrt_update, sqrt_close)
+
+result = sqrt(256)
+```
+
+让我们看下当程序执行到`sqrt(256)`但是还未执行到`return improve(sqrt_update, sqrt_close)`时候的环境：
+
+![image-20240221102433295](C:\Users\crx\AppData\Roaming\Typora\typora-user-images\image-20240221102433295.png)
+
+可以得知当调用存在于`[parent= Globa]`函数`sqrt()`的时候：
+
+1. 新增本地栈：新增一个名为`sqrt`的本地栈，代号为`f1`。（todo：`f1`应该是代号或者标签，类似指针的作用，下面统一用“标签”）。
+2. 注明上级栈：`The parent of a function is the frame in which it was defined`。将原型函数`sqrt()`的栈**`Global`**作为这个本地栈`sqrt`的上级栈。
+3. 参数传递：将传入的实参`256`赋值给形参`a`，现在`a = 256`。
+4. 嵌套函数定义：`sqrt_update(x)`和`sqrt_close(x)`定义在此本地栈中，且两个函数的上级栈均为当前`sqrt`的本地栈，即`f1`。
+
+从这个计算`sqrt(256)`的部分，就可以将上面`调用函数和定义函数时候的环境图表`如何画概念理解清晰了。
