@@ -1384,3 +1384,31 @@ result = sqrt(256)
 4. 嵌套函数定义：`sqrt_update(x)`和`sqrt_close(x)`定义在此本地栈中，且两个函数的上级栈均为当前`sqrt`的本地栈，即`f1`。
 
 从这个计算`sqrt(256)`的部分，就可以将上面`调用函数和定义函数时候的环境图表`如何画概念理解清晰了。
+
+### 修改Python别名
+
+发现课程提供的启动python程序的命令均为`python3`，而我们的环境中只能用`python`来启动 Python 解释器，可以通过修改python的别名来实现不同名称调用同一个程序的效果。
+
+1. **配置命令别名:** 如果你想使用 `py`、`py3`、`python3` 这些别名，你可以创建一个 `py.bat` 文件（同理 `py3.bat`、 `python3.bat`）并将其添加到系统路径。在 `C:\Users\<YourUsername>\AppData\Local\Programs\Python\Python3x\Scripts` 目录（这个是你自己安装python程序的目录）下创建一个名为 `py.bat` 的文本文件，其中内容如下：
+
+   ```bat
+   @echo off
+   C:\Users\<YourUsername>\AppData\Local\Programs\Python\Python3x\python.exe %*
+   ```
+
+   将 `<YourUsername>` 替换为你的用户文件夹名。然后，将 `C:\Users\<YourUsername>\AppData\Local\Programs\Python\Python3x\Scripts` 添加到系统路径中。
+
+2. **保存并关闭所有窗口:** 确保保存所有打开的窗口，并关闭命令提示符等。
+
+3. **验证配置:** 打开新的命令提示符窗口，并输入以下命令进行验证：
+
+   ```bat
+   bashCopy codepython --version
+   py --version
+   py3 --version
+   python3 --version
+   ```
+
+   如果配置正确，你应该能够看到 Python 的版本信息。
+
+现在，应该能够正常使用 `py`、`py3`、`python3` 以及 `python` 命令调用 Python 解释器。
