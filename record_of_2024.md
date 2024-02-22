@@ -1386,16 +1386,29 @@ result = sqrt(256)
 例子2：
 
 ```py
->>> def cake():
-...    print('beets')
-...    def pie():
-...        print('sweets')
-...        return 'cake'
-...    return pie
->>> chocolate = cake()
+def cake():
+   print('beets')
+   def pie():
+       print('sweets')
+       return 'cake'
+   return pie
+chocolate = cake()
 ```
 
 提供一个[Python图形化代码执行过程](https://pythontutor.com/cp/composingprograms.html#mode=edit)的网站，输入代码执行，多尝试一下~😉
+
+[例子3](https://cs61a.org/disc/disc02/)：
+
+```py
+def team(work):
+    return t(work) - 1
+def dream(work, s):
+    if work(s-2):
+        t = not s
+    return not t
+work, t = 3, abs
+team = dream(team, work + 1) and t
+```
 
 ### 修改Python别名
 
@@ -1485,3 +1498,51 @@ interpreter!
 - `()`: 这是对 Lambda 函数的调用。通过在 Lambda 表达式后面加上一对小括号，就会调用这个函数。因为 Lambda 函数不接受参数，所以小括号是空的。
 
 所以，`(lambda: 3)()` 的结果是 `3`，因为 Lambda 函数被调用并返回了 `3`。这种构造方式通常用于创建简单的匿名函数，特别是在需要传递函数作为参数的地方。
+
+### 从右边开始寻找整数的第k位
+
+Implement `match_k`, which takes in an integer `k` and returns a function that takes in a variable `x` and returns `True` if all the digits in `x` that are `k` apart are the same.
+
+For example, `match_k(2)` returns a one argument function that takes in `x` and checks if digits that are 2 away in `x` are the same.
+
+`match_k(2)(1010)` has the value of `x = 1010` and digits 1, 0, 1, 0 going from left to right. `1 == 1` and `0 == 0`, so the `match_k(2)(1010)` results in `True`.
+
+`match_k(2)(2010)` has the value of `x = 2010` and digits 2, 0, 1, 0 going from left to right. `2 != 1` and `0 == 0`, so the `match_k(2)(2010)` results in `False`.
+
+**Important:** You may not use strings or indexing for this problem.
+
+Floor dividing by powers of 10 gets rid of the rightmost digits.
+
+```py
+def match_k(k):
+    """Returns a function that checks if digits k apart match.
+
+    >>> match_k(2)(1010)
+    True
+    >>> match_k(2)(2010)
+    False
+    >>> match_k(1)(1010)
+    False
+    >>> match_k(1)(1)
+    True
+    >>> match_k(1)(2111111111111111)
+    False
+    >>> match_k(3)(123123)
+    True
+    >>> match_k(2)(123123)
+    False
+    """
+    def check(x):
+        while x // (10 ** k) > 0:
+            if (x % 10) != (x // (10 ** k)) % 10:
+                return False
+            x //= 10
+        return True
+    return check
+```
+
+分析：
+
+1. 判断最后一位与右边数第k位数字是否相同：`(x % 10) != (x // (10 ** k)) % 10`
+2. 如果不相同，则这个数肯定不符合题目要求，直接返回`False`
+3. 如果相同，则将比较位置转为左手边的下一个数字：`x //= 10`
