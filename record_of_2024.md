@@ -1638,3 +1638,72 @@ ok，首先用xmind整理本周的学习章节的事实性的知识。
 刚刚在[可变数据](https://composingprograms.netlify.app/2/4)的评论区埋下了一个坑：我要出一份教程，降低阅读cs61a材料的痛苦程度（主要依据是增加必要背景知识，屏蔽繁文缛节）。
 
 今天的整理就到这了，明天跑步，积累跑量。
+
+## 2.26 DDL下的背景知识2
+
+早晨跑了10km，用时53分钟。
+
+继续整理今天所需要的2.5到2.9。start at 8:52
+
+### 2.5 面向对象编程
+
+1. 用`抽象屏障`和`调度字典`介绍。
+2. 代码`class Account`
+3. 内置函数 `getattr` 按名称返回对象的属性：`getattr(spock_account, 'balance')`
+4. 类名命名规则：CapWords 约定。方法名称遵循使用下划线分隔的小写单词命名函数的标准约定
+5. 类属性：为 `Account` 创建名称为 `interest` 的类属性。
+6. 继承：支票账户`CheckingAccount` 是 `Account` 的特化。
+7.  `Account` 类的完整实现
+8.  `CheckingAccount` 的完整实现
+9. `deposit_all(winners, amount=5)`：将 5 美元存入每个帐户列表
+10. 多继承：`SavingsAccount(Account)``
+11. ``AsSeenOnTVAccount(CheckingAccount, SavingsAccount)`：取款和存款都将产生费用，分别使用 `CheckingAccount` 和 `SavingsAccount` 中的函数定义
+
+### 2.6 实现类和对象
+
+1. 使用`调度字典`
+2. `make_instance(cls)`：将一个类传递给形参`cls`。
+3. `bind_method(value, instance)`：将 `instance` 作为第一个参数插入到函数值中，从而创建绑定方法值
+4. `make_class(attributes, base_class=None)`：可以响应 `get` 和 `set` 消息，以及 `new` 消息以及`init_instance(cls, *args)`函数。
+5. 使用上面的方法重新创建一个 `Account` 类，一个 `CheckingAccount` 子类，以及为他们各自创建一个实例
+
+### 2.7 对象抽象
+
+1. 字符串构造函数： `str`；
+2. `repr` 函数返回一个 Python 可解释的表达式，该表达式的求值结果与原对象相同
+3. 专用方法：特殊名称会在特殊情况下被 Python 解释器调用
+4. 复数的直角坐标系（实部和虚部）和极坐标系（幅度和角度）表示
+5. 实现复数最高等级的抽象：`class Number`:要求数值型对象拥有 `add` 和 `mul` 方法
+6. 复数的乘法和加法运算规则
+7. 对复数的数学运算：`Complex` 类
+8. 两个表示复数的类:`ComplexRI` 使用实部和虚部构建一个复数；`ComplexMA` 使用幅度和角度构建一个复数
+9. 实现算术运算所需要的接口包括四个属性：`real`、`imam`、`magnitude` 和 `angle`。
+10. `@property` 修饰符
+11. 泛型函数`Rational` 类来精确地表示分数
+12. 下面的内容有点看不懂，上面的背景知识掌握了后再看吧
+
+### 2.8 效率
+
+1.  树递归函数：计算斐波那契数列中的数字的 `fib` 函数
+2. `count` 函数：检查 `fib` 函数被调用的次数
+3. 函数的空间需求：活动和非活动的状态
+4. 函数 `count_frames` ：跟踪尚未返回的函数调用次数 `open_count`
+5. 记忆化（Memoization）：`memo(f)`函数提升效率
+6. 增长阶- 时间复杂度啊！数学论证（头大）以及技能`指数运算`
+7. 增长类别：（上面6的内容得搞懂才能学这个）
+
+### 2.9 递归对象
+
+1. 递归对象概念。
+2. `Link`类： `__len__` 和 `__getitem__` 的定义都是递归的
+3. `link_expression(s)`：将一个 `Link` 实例转换为一个字符串表达式
+4.  `__repr__` 方法
+5. 闭包性质：一个 `Link` 实例的第一个元素也可以是一个 `Link` 实例
+6. 函数 `count_partitions`（第一章分割数）
+7. `fib_tree(n)`：`Tree` 类可以表示 **用于计算斐波那契数的函数 `fib` ** 的 递归表达式树 中计算的值
+8. 有序序列集合节省时间：使集合元素按递增顺序排列
+9. 二叉搜索树的 集合
+10. 平衡二叉树
+
+我去，需要补充的知识不少呢。Ends at 10:17（8：52 - 10 ：17），eat lunch~
+
