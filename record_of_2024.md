@@ -1829,3 +1829,32 @@ OK，明天就是周四了，有什么想法吗？
 2. 链表的基础算法。
 
 ok，又写了下2.4.7，这里用到的pop和push都是需要提前了解的。晚安玛卡巴卡，明天回顾下概念重新实现一遍链表吧。然后再将调度字典和约束系统代码中涉及到的背景知识写一下。
+
+## 2.29
+
+今天不再拘泥于例题了，直接上课后习题。
+
+一段话治好了我的材料阅读焦虑：
+
+> Remember, it's ok if someone hasn't learned everything yet and needs more time to master the course material. The whole point of the course is for students to learn things they don't already know. Please support each other in the process.
+
+这门课就是让我们掌握不了解的知识的，所以不要担心课程材料没有掌握地足够好（而且反问：怎么才算掌握地好呢？），只要跟着学就一定能学到相应的技能。
+
+**简单阅读1.7的要点**
+
+首先一句话总结本节内容：用递归调用来理解“函数抽象”的概念。
+
+所以在这里`递归`是工具，是为了方便更好地理解函数抽象概念的。这里面涉及到的函数抽象概念就是递归的核心问题：如何将原问题分解为同类的子问题而解决。
+
+想要通畅阅读本节，你是需要一定的背景知识的。背景知识如下（预计背景知识准备时间：0.5-1h）：
+
+1. [递归是什么？](https://algo.itcharge.cn/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/#_1-%E9%80%92%E5%BD%92%E7%AE%80%E4%BB%8B)（思考：递归分为递推和回归，这两个过程是按照什么原则进行的？）
+2. [如何实现递归？](https://algo.itcharge.cn/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/#_3-%E9%80%92%E5%BD%92%E4%B8%89%E6%AD%A5%E8%B5%B0)
+3. [图形化执行递归函数](https://pythontutor.com/cp/composingprograms.html#mode=edit)：为了更好地理解递归的过程，将1.7材料中较为简单的递归打印函数：`cascade(n)`代码粘贴进去，走一遍看看效果
+4. [斐波那契数列的递归应用](https://algo.itcharge.cn/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/#_5-1-%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0)
+5. [什么是`分割数`](https://zh.wikipedia.org/wiki/%E6%95%B4%E6%95%B8%E5%88%86%E6%8B%86)？（1.7节的材料最后用分割数作为检验递归调用是否理解的范例）
+
+带着一定的问题将上面涉及的背景知识看完，然后再通篇阅读1.7，就能明白这节讲什么了。
+
+------
+
