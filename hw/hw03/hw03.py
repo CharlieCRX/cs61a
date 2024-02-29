@@ -28,6 +28,12 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n == 0:
+        return 0
+    elif n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    
+    return num_eights(n // 10)
 
 
 def digit_distance(n):
@@ -50,6 +56,9 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    return abs(n%100%10 - n%100//10) + digit_distance(n // 10)
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -72,7 +81,22 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def sum_odd(k, n):
+        """Compute the sum odd_func(k) + odd_func(k + 2) + ..., up to n."""
+        if k == n:
+            return odd_func(n)
+        if k > n:
+            return 0
+        return odd_func(k) + sum_odd(k + 2, n)
+    
+    def sum_even(k, n):
+        if k == n:
+            return even_func(n)
+        if k > n:
+            return 0
+        return even_func(k) + sum_even(k + 2, n)
+    
+    return sum_odd(1,n) + sum_even(2, n)
 
 def next_larger_coin(coin):
     """Returns the next larger coin in order.
@@ -126,6 +150,16 @@ def count_coins(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def f(m, n):
+        """ n must use coins of value of 1, 5, 10, 25 """
+        if m < 0:
+            return 0
+        elif m <= 1 or n == 1:
+            return 1 
+        return f(m - n, n) + f(m, next_smaller_coin(n))
+    return f(total, 25)
+    
+
 
 
 def print_move(origin, destination):
