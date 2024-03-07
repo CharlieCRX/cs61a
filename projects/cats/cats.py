@@ -31,6 +31,11 @@ def pick(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    right_lists = [paragraph for paragraph in paragraphs if select(paragraph)]
+    if k < len(right_lists):
+        return right_lists[k]
+    else:
+        return ''
     # END PROBLEM 1
 
 
@@ -50,6 +55,17 @@ def about(subject):
     assert all([lower(x) == x for x in subject]), 'subjects should be lowercase.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+
+    def match(target):
+        # Convert the input-string to lowercase and without punctuation, and split the string into a list based on spaces
+        tar_lists = split(remove_punctuation(lower(target)))
+        for tar_item in tar_lists:
+            for word in subject:
+                if tar_item == word:
+                    return True
+        return False
+    
+    return match
     # END PROBLEM 2
 
 
@@ -80,8 +96,22 @@ def accuracy(typed, source):
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    # accuracy('', '') == 100.0
+    if len(typed_words) == len(source_words) == 0:
+        return 100.0
+    
+    match_nums, nomatch_nums = 0, 0
+    i = 0
+    while i < len(typed_words):
+        if i >= len(source_words) or typed_words[i] != source_words[i]:
+            nomatch_nums += 1
+        else:
+            match_nums += 1
+        i += 1
+    if match_nums == 0 and nomatch_nums == 0:
+        return 0.0
+    return match_nums / (match_nums + nomatch_nums) * 100
     # END PROBLEM 3
-
 
 def wpm(typed, elapsed):
     """Return the words-per-minute (WPM) of the TYPED string.
@@ -98,6 +128,8 @@ def wpm(typed, elapsed):
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    length = len(typed)
+    return length / 5 / (elapsed / 60)
     # END PROBLEM 4
 
 
