@@ -103,6 +103,7 @@ def accuracy(typed, source):
     match_nums, nomatch_nums = 0, 0
     i = 0
     while i < len(typed_words):
+        #超出限定长度的单词 + 同位置但不匹配的单词 
         if i >= len(source_words) or typed_words[i] != source_words[i]:
             nomatch_nums += 1
         else:
@@ -159,8 +160,26 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
-    # END PROBLEM 5
+    diff_num_list = [diff_function(typed_word, source, limit) for source in word_list]
 
+    if typed_word in word_list or min(diff_num_list) > limit:
+        return typed_word
+    
+    min_diff, i = limit + 1, 0
+    correct_index = 0
+    while i < len(diff_num_list):
+        if diff_num_list[i] < min_diff:
+            correct_index = i
+            min_diff = diff_num_list[i]
+        i += 1
+    return word_list[correct_index]
+            
+    # END PROBLEM 5
+'''words_list = sorted(lines_from_file('E:\\code\\cs61a\\projects\\cats\\data\\words.txt')[:10000])
+    diff_fun = lambda w1, w2, limit: sum([w1[i] != w2[i] for i in range(min(len(w1), len(w2)))]) + abs(len(w1) - len(w2))
+    autocorrect("gesting",words_list, diff_fun, 10)
+'''
+autocorrect('stilter', ['modernizer', 'posticum', 'undiscernible', 'heterotrophic', 'waller', 'marque', 'dephosphorization'], lambda x, y, lim: min(lim + 1, abs(len(x) - len(y))), 1)
 
 def feline_fixes(typed, source, limit):
     """A diff function for autocorrect that determines how many letters
