@@ -7,7 +7,7 @@ def divide(quotients, divisors):
     >>> divide(range(1, 5), range(20, 25))
     {1: [20, 21, 22, 23, 24], 2: [20, 22, 24], 3: [21, 24], 4: [20, 24]}
     """
-    return {____: ____ for ____ in ____}
+    return {q: [d for d in divisors if d % q == 0] for q in quotients}
 
 
 def buy(required_fruits, prices, total_amount):
@@ -29,9 +29,9 @@ def buy(required_fruits, prices, total_amount):
             print(cart)
         elif fruits and amount > 0:
             fruit = fruits[0]
-            price = ____
-            for k in ____:
-                add(____, ____, ____)
+            price = prices[fruit]
+            for k in range(1, amount // price + 1):
+                add(fruits[1:], amount - price * k, cart + display(fruit,price))
     add(required_fruits, total_amount, '')
 
 
@@ -64,6 +64,10 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    x1, y1 = get_lat(city_a), get_lon(city_a)
+    x2, y2 = get_lat(city_b), get_lon(city_b)
+
+    return sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -81,6 +85,10 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    temp = make_city('temp', lat, lon)
+    dis_a = distance(temp, city_a)
+    dis_b = distance(temp, city_b)
+    return get_name(city_a) if dis_a < dis_b else get_name(city_b)
 
 def check_city_abstraction():
     """
