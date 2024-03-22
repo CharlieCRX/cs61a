@@ -102,6 +102,7 @@ def accuracy(typed, source):
     
     match_nums, nomatch_nums = 0, 0
     i = 0
+    # 以输入的单词为界，逐一进行匹配
     while i < len(typed_words):
         #超出限定长度的单词 + 同位置但不匹配的单词 
         if i >= len(source_words) or typed_words[i] != source_words[i]:
