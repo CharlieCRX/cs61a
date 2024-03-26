@@ -243,22 +243,26 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
+    if typed == "" or source == "": 
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return max(len(typed), len(source))
         # END
     # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
+    if limit == 0: 
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return int(typed != source)
         # END
+    if typed == source:
+        return 0
+    
+    if typed[0] == source[0]:
+        return minimum_mewtations(typed[1:], source[1:], limit)
     else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = 1 + minimum_mewtations(typed, source[1:], limit - 1)
+        remove = 1 + minimum_mewtations(typed[1:], source, limit - 1)
+        substitute = 1 + minimum_mewtations(typed[1:], source[1:], limit - 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(substitute, min(add, remove))
         # END
 
 
@@ -300,6 +304,15 @@ def report_progress(typed, source, user_id, upload):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    correct_word_nums = 0
+    for i in range(len(typed)):
+        if typed[i] != source[i]:
+            break
+        correct_word_nums += 1
+    ratio = correct_word_nums / len(source)
+    dic_for_current_user = {'id':user_id, 'progress':ratio}
+    upload(dic_for_current_user)
+    return ratio
     # END PROBLEM 8
 
 
@@ -322,6 +335,8 @@ def time_per_word(words, timestamps_per_player):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    times = [[b - a for a,b in zip(list[:-1], list[1:])] for list in timestamps_per_player]
+    return match(words, times)
     # END PROBLEM 9
 
 
@@ -344,6 +359,24 @@ def fastest_words(match):
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    def combine_nested_lists(*args):
+        # 使用 zip(*args) 将嵌套列表按索引位置配对，并使用列表解析式构建新列表
+        result_list = [list(items) for items in zip(*args)]
+        return result_list
+    
+    def get_index_for_min_value_of_each_list(nested_list):
+        return [lst.index(min(lst)) for lst in nested_list]
+    # 获取所有人每个单词的用时列表
+    per_word_time_for_everyone = combine_nested_lists(*get_all_times(match))
+    min_element_per_list = get_index_for_min_value_of_each_list(per_word_time_for_everyone)
+
+    each_word_and_fastest_person_num = {k:v for k,v in zip(get_all_words(match), min_element_per_list)}
+
+    result = []
+    for i in range(len(get_all_times(match))):
+        son_list = [word for word, person_num in each_word_and_fastest_person_num.items() if person_num == i]
+        result.append(son_list)
+    return result
     # END PROBLEM 10
 
 
@@ -397,7 +430,6 @@ enable_multiplayer = False  # Change to True when you're ready to race.
 ##########################
 # Command Line Interface #
 ##########################
-
 
 def run_typing_test(topics):
     """Measure typing speed and accuracy on the command line."""
