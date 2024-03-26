@@ -104,7 +104,7 @@ def accuracy(typed, source):
     i = 0
     # 以输入的单词为界，逐一进行匹配
     while i < len(typed_words):
-        #超出限定长度的单词 + 同位置但不匹配的单词 
+        #不匹配单词 = 超出正确数量的单词 + 同位置但不匹配的单词 
         if i >= len(source_words) or typed_words[i] != source_words[i]:
             nomatch_nums += 1
         else:
@@ -161,26 +161,23 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
-    diff_num_list = [diff_function(typed_word, source, limit) for source in word_list]
-
-    if typed_word in word_list or min(diff_num_list) > limit:
+    if typed_word in word_list:
         return typed_word
     
-    min_diff, i = limit + 1, 0
-    correct_index = 0
-    while i < len(diff_num_list):
-        if diff_num_list[i] < min_diff:
-            correct_index = i
-            min_diff = diff_num_list[i]
-        i += 1
-    return word_list[correct_index]
+    diff_word_dict = {source_word : diff_function(typed_word, source_word, limit) for source_word in word_list}
+
+    if min(diff_word_dict.values()) > limit:
+        return typed_word
+    def min_key_with_first_min_value(dict):
+        min_value = min(dict.values())  # 找到字典中的最小值
+        for key, value in dict.items():
+            if value == min_value:
+                return key
+    key_word = min_key_with_first_min_value(diff_word_dict)
+    return key_word
             
     # END PROBLEM 5
-'''words_list = sorted(lines_from_file('E:\\code\\cs61a\\projects\\cats\\data\\words.txt')[:10000])
-    diff_fun = lambda w1, w2, limit: sum([w1[i] != w2[i] for i in range(min(len(w1), len(w2)))]) + abs(len(w1) - len(w2))
-    autocorrect("gesting",words_list, diff_fun, 10)
-'''
-autocorrect('stilter', ['modernizer', 'posticum', 'undiscernible', 'heterotrophic', 'waller', 'marque', 'dephosphorization'], lambda x, y, lim: min(lim + 1, abs(len(x) - len(y))), 1)
+# autocorrect('stilter', ['modernizer', 'posticum', 'undiscernible', 'heterotrophic', 'waller', 'marque', 'dephosphorization'], lambda x, y, lim: min(lim + 1, abs(len(x) - len(y))), 1)
 
 def feline_fixes(typed, source, limit):
     """A diff function for autocorrect that determines how many letters
@@ -205,9 +202,26 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
-    # END PROBLEM 6
+    def min_changes_to_word_recursive(input_word, target_word, diff_acc):
+        if diff_acc > limit:
+            return 1
+        
+        if len(input_word) == 0 or len(target_word) == 0:
+            return 0
+        
+        char_a = input_word[0]
+        char_b = target_word[0]
 
+        if char_a != char_b:
+            return 1 + min_changes_to_word_recursive(input_word[1:], target_word[1:], diff_acc + 1)
+        else:
+            return min_changes_to_word_recursive(input_word[1:], target_word[1:], diff_acc)
+    diff_len = abs(len(typed) - len(source)) + min_changes_to_word_recursive(typed, source, 0)
+
+    return diff_len
+    # END PROBLEM 6
+limit = 4
+feline_fixes("roses", "arose", limit) > limit
 
 ############
 # Phase 2B #
