@@ -23,6 +23,20 @@ def deep_map(f, s):
     "*** YOUR CODE HERE ***"
 
 
+    # base case1: Processing of traversing element elem
+    # If it is not a list element, then for f(elem);
+    # If it is a list element, call deep_map(f, elem) on the list element elem
+    i = 0
+    while i < len(s):
+        if type(s[i]) == list:
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i])
+        i += 1
+    # base case: end of traversal
+    # After traversing the last element, return None
+    return None
+
 HW_SOURCE_FILE=__file__
 
 
@@ -65,15 +79,19 @@ def end(s):
     assert is_arm(s), "must call end on an arm"
     return s[2]
 
+
+
 def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
+    return ['planet',mass]
 
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
+    return p[1]
 
 def is_planet(p):
     """Whether p is a planet."""
@@ -105,6 +123,10 @@ def total_mass(m):
         assert is_mobile(m), "must get total mass of a mobile or a planet"
         return total_mass(end(left(m))) + total_mass(end(right(m)))
 
+def torque(arm):
+    """返回arm的力矩"""
+    return length(arm) * total_mass(end(arm))
+
 def balanced(m):
     """Return whether m is balanced.
 
@@ -126,7 +148,13 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if is_planet(m):
+        return True
+    
+    if torque(left(m)) == torque(right(m)):
+        return balanced(end(left(m))) and balanced(end(right(m)))
+    else:
+        return False
 
 HW_SOURCE_FILE=__file__
 
@@ -141,6 +169,10 @@ def max_path_sum(t):
     17
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return label(t)
+    else:
+        return label(t) + max([max_path_sum(b) for b in branches(t)])
 
 
 
