@@ -24,10 +24,17 @@ def insert_items(s, before, after):
     >>> large_s3
     [1, 4, 6, 4, 6, 8]
     >>> large_s3 is large_s
+
     True
     """
     "*** YOUR CODE HERE ***"
-
+    i = 0
+    while i < len(s):
+        if s[i] == before:
+            s.insert(i + 1, after)
+            i += 1
+        i += 1
+    return s    
 
 def group_by(s, fn):
     """Return a dictionary of lists that together contain the elements of s.
@@ -40,14 +47,13 @@ def group_by(s, fn):
     {9: [-3, 3], 4: [-2, 2], 1: [-1, 1], 0: [0]}
     """
     grouped = {}
-    for ____ in ____:
-        key = ____
+    for item in s:
+        key = fn(item)
         if key in grouped:
-            ____
+            grouped[key].append(item)
         else:
-            grouped[key] = ____
+            grouped[key] = [item]
     return grouped
-
 
 def count_occurrences(t, n, x):
     """Return the number of times that x is equal to one of the
@@ -71,6 +77,11 @@ def count_occurrences(t, n, x):
     2
     """
     "*** YOUR CODE HERE ***"
+    count = 0
+    for _ in range(n):
+        if next(t) == x:
+            count += 1
+    return count
 
 
 def repeated(t, k):
@@ -94,7 +105,20 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
-
+    count = 1
+    temp = next(t)
+    while True:
+        val = next(t)
+        if val == temp:
+            count += 1
+        else:
+            temp = val
+            count = 1
+        if count == k:
+            return temp
+             
+s = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
+repeated(s, 2)
 
 def sprout_leaves(t, leaves):
     """Sprout new leaves containing the labels in leaves at each leaf of
