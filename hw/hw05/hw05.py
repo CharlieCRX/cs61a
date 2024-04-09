@@ -9,6 +9,13 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    yield n
+    if n == 1:
+        yield from hailstone(n)
+    elif n % 2 == 0:
+        yield from hailstone(n // 2)
+    else:
+        yield from hailstone(3 * n + 1)
 
 
 def merge(a, b):
@@ -24,6 +31,20 @@ def merge(a, b):
     [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
     """
     "*** YOUR CODE HERE ***"
+    first_a, first_b = next(a), next(b)
+    while True:
+        # 两值相同，返回一个即可
+        if first_a == first_b:
+            yield first_a
+            first_a, first_b = next(a), next(b)
+        # a较小，则返回a生成结果，且本轮只迭代a
+        elif first_a < first_b:
+            yield first_a
+            first_a = next(a)
+        # b较小，则返回b生成结果，且本轮只迭代b
+        else:
+            yield first_b
+            first_b = next(b)
 
 
 def yield_paths(t, value):
@@ -61,10 +82,10 @@ def yield_paths(t, value):
     [[0, 2], [0, 2, 1, 2]]
     """
     if label(t) == value:
-        yield ____
+        yield [value]
     for b in branches(t):
-        for ____ in ____:
-            yield ____
+        for path in yield_paths(b, value):
+            yield [label(t)] + path
 
 
 
