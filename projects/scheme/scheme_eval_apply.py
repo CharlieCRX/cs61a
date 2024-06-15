@@ -34,6 +34,7 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     else:
         # BEGIN PROBLEM 3
         "*** YOUR CODE HERE ***"
+        return scheme_apply(scheme_eval(first, env), rest.map(lambda x : scheme_eval(x ,env)), env)
         # END PROBLEM 3
 
 def scheme_apply(procedure, args, env):
@@ -45,10 +46,20 @@ def scheme_apply(procedure, args, env):
     if isinstance(procedure, BuiltinProcedure):
         # BEGIN PROBLEM 2
         "*** YOUR CODE HERE ***"
+        # 1. Convert the Scheme list to a Python list of arguments
+        argslist = []
+        while (args != nil):
+            argslist += [args.first]
+            args = args.rest
+        # 2. If procedure.need_env is True, then add the current environment env to the list
+        if procedure.need_env is True:
+            argslist.append(env)
         # END PROBLEM 2
         try:
             # BEGIN PROBLEM 2
             "*** YOUR CODE HERE ***"
+            # 3. Return the result of calling procedure.py_func on all of those arguments.
+            return procedure.py_func(*argslist)
             # END PROBLEM 2
         except TypeError as err:
             raise SchemeError('incorrect number of arguments: {0}'.format(procedure))
@@ -118,9 +129,6 @@ def optimize_tail_calls(unoptimized_scheme_eval):
         "*** YOUR CODE HERE ***"
         # END OPTIONAL PROBLEM 1
     return optimized_eval
-
-
-
 
 
 

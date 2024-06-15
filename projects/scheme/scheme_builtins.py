@@ -20,6 +20,8 @@ from scheme_utils import *
 # builtin and used in scheme.create_global_frame.
 BUILTINS = []
 
+# 将一个 Python 函数注册为 Scheme 的内建函数。
+# 通过装饰 Python 函数并传递函数名称，它们将被添加到 BUILTINS 列表中，作为 Scheme 解释器可以调用的内建函数。
 def builtin(*names, need_env=False):
     """An annotation to convert a Python function into a BuiltinProcedure."""
     def add(py_func):
