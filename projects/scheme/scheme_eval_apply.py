@@ -34,7 +34,7 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     else:
         # BEGIN PROBLEM 3
         "*** YOUR CODE HERE ***"
-        return scheme_apply(scheme_eval(first, env), rest.map(lambda x : scheme_eval(x ,env)), env)
+        return scheme_apply(scheme_eval(first, env), rest.map(lambda x : scheme_eval(x, env)), env)
         # END PROBLEM 3
 
 def scheme_apply(procedure, args, env):
@@ -49,7 +49,7 @@ def scheme_apply(procedure, args, env):
         # 1. Convert the Scheme list to a Python list of arguments
         argslist = []
         while (args != nil):
-            argslist += [args.first]
+            argslist.append(args.first)
             args = args.rest
         # 2. If procedure.need_env is True, then add the current environment env to the list
         if procedure.need_env is True:
