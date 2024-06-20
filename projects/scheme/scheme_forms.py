@@ -44,6 +44,16 @@ def do_define_form(expressions, env):
         # defining a named procedure e.g. (define (f x y) (+ x y))
         # BEGIN PROBLEM 10
         "*** YOUR CODE HERE ***"
+        symbol = signature.first
+        formals = signature.rest
+        body = expressions.rest
+
+
+        lambda_expression = Pair(formals, body)
+        lambda_form = do_lambda_form(lambda_expression, env)
+
+        env.define(symbol, lambda_form)
+        return symbol
         # END PROBLEM 10
     else:
         bad_signature = signature.first if isinstance(signature, Pair) else signature
@@ -225,6 +235,7 @@ def do_mu_form(expressions, env):
     validate_formals(formals)
     # BEGIN PROBLEM 11
     "*** YOUR CODE HERE ***"
+    return MuProcedure(formals, expressions.rest)
     # END PROBLEM 11
 
 
