@@ -131,6 +131,14 @@ def do_and_form(expressions, env):
     """
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
+    while expressions is not nil:
+        val = scheme_eval(expressions.first, env)
+        if is_scheme_false(val):
+            return False
+        if expressions.rest is nil:
+            return val
+        expressions = expressions.rest
+    return True
     # END PROBLEM 12
 
 def do_or_form(expressions, env):
@@ -149,6 +157,12 @@ def do_or_form(expressions, env):
     """
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
+    while expressions is not nil:
+        value = scheme_eval(expressions.first, env)
+        if is_scheme_true(value):
+            return value
+        expressions = expressions.rest
+    return False
     # END PROBLEM 12
 
 def do_cond_form(expressions, env):
@@ -169,7 +183,17 @@ def do_cond_form(expressions, env):
         if is_scheme_true(test):
             # BEGIN PROBLEM 13
             "*** YOUR CODE HERE ***"
+            if clause.rest is not nil:
+                return eval_all(clause.rest, env)
+            else:
+                return test
+        #undifined : no true predicates and no `else` 
             # END PROBLEM 13
+        if clause.first == 'else':
+            if clause.rest is not nil:
+                return eval_all(clause.rest, env)
+            else:
+                return True
         expressions = expressions.rest
 
 def do_let_form(expressions, env):
@@ -193,6 +217,15 @@ def make_let_frame(bindings, env):
     names = vals = nil
     # BEGIN PROBLEM 14
     "*** YOUR CODE HERE ***"
+    while bindings is not nil:
+        expr = bindings.first
+        names = Pair(expr.first, names)
+
+        validate_form(expr.rest, 1, 1)
+
+        vals = Pair(scheme_eval(expr.rest.first, env), vals)
+        bindings = bindings.rest
+    validate_formals(names)
     # END PROBLEM 14
     return env.make_child_frame(names, vals)
 
