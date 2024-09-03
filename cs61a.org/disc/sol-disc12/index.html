@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/disc.css">
+
+
+    <title>
+Discussion 12 | CS 61A Spring 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+            <li><a href="https://edstem.org/us/courses/52971/discussion/" target="_blank">Ed</a></li>
+            <li><a href="../../office-hours.html">Office Hours</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../academic-interns.html">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://sections.cs61a.org">Section Selector</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+                <li><a href="../../resources.html">Past Exams & Sites</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department/Campus Resources</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li><a href="../../contact/index.html">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 12: Final Review
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc12.pdf" class="label label-outline">disc12.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<!-- <div class="alert storable-login-status"></div> -->
+
+
+    
+<p><strong>Reminder:</strong> Use Discord for voice chat with the course staff. Write to <code>@discuss</code> in the <code>#discuss&#x2d;queue</code> channel on Discord at any time, and a member of the course staff will join your group's voice channel.</p>
+
+<p>Pick someone in your group to <a href="../../articles/discord.html">join Discord</a>.
+It's fine if multiple people join, but one is enough.</p>
+
+<p>Now switch to Pensieve:</p>
+
+<ul>
+  <li><strong>Everyone</strong>: Go to <a href="http://discuss.pensieve.co">discuss.pensieve.co</a> and log in with your @berkeley.edu email, then enter your group number. (Your group number is the number of your Discord channel.)</li>
+</ul>
+
+<p>Once you're on Pensieve, you don't need to return to this page; Pensieve has all the same content (but more features). If for some reason Penseive doesn't work, return to this page and continue with the discussion.</p>
+
+<p>Post in the <code>#help</code> channel on <a href="../../articles/discord.html">Discord</a> if you have trouble.</p>
+
+<p><strong>Pro tip:</strong> Any of you can type a question into your group's Discord <a href="https://support.discord.com/hc/en-us/articles/4412085582359-Text-Channels-Text-Chat-In-Voice-Channels#h_01FMJT412WBX1MR4HDYNR8E95X">channel's text chat</a> with the <code>@discuss</code> tag, and a member of the course staff will respond.</p>
+
+
+<h1 id="getting-started">Getting Started</h1>
+
+
+<p>If you have only 1 or 2 people in your group, you can join the other group in
+the room with you.</p>
+
+<p><strong>Ice breaker:</strong> Everybody say your name and the non-CS/EECS course that you're
+most excited about taking next semester.</p>
+
+
+<h1 id="lists">Lists</h1>
+
+
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Reminder: list mutation<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+The two most common mutation operations for lists are item assignment and the
+<code>append</code> method.
+
+<pre><code>&gt;&gt;&gt; s = [1, 3, 4]
+&gt;&gt;&gt; t = s  # A second name for the same list
+&gt;&gt;&gt; t[0] = 2  # this changes the first element of the list to 2, affecting both s and t
+&gt;&gt;&gt; s
+[2, 3, 4]
+&gt;&gt;&gt; s.append(5)  # this adds 5 to the end of the list, affecting both s and t
+&gt;&gt;&gt; t
+[2, 3, 4, 5]</code></pre>
+
+<p>There are many other list mutation methods:</p>
+
+<ul>
+  <li><code>append(elem)</code>:
+  Add <code>elem</code> to the end of the list. Return <code>None</code>.</li>
+  <li><code>extend(s)</code>:
+  Add all elements of iterable <code>s</code> to the end of the list. Return <code>None</code>.</li>
+  <li><code>insert(i, elem)</code>:
+  Insert <code>elem</code> at index <code>i</code>. If <code>i</code> is greater than or equal to the length of
+  the list, then <code>elem</code> is inserted at the end. This does not replace any
+  existing elements, but only adds the new element <code>elem</code>. Return <code>None</code>.</li>
+  <li><code>remove(elem)</code>:
+  Remove the first occurrence of <code>elem</code> in list. Return <code>None</code>.
+  Errors if <code>elem</code> is not in the list.</li>
+  <li><code>pop(i)</code>:
+  Remove and return the element at index <code>i</code>.</li>
+  <li><code>pop()</code>:
+  Remove and return the last element.
+  </div></li>
+</ul>
+
+
+<h3 id="q1-word-rope">Q1: Word Rope</h3>
+
+
+<p><strong>Definition:</strong> A <em>rope</em> in Python is a list containing only one-letter strings
+except for the last element, which may either be a one-letter string or a rope.</p>
+
+<p>Implement <code>word_rope</code>, a Python function that takes a non-empty string <code>s</code>
+containing only letters and spaces that does not start or end with a space. It
+returns a <em>rope</em> containing the letters of <code>s</code> in which each word is in a
+separate list.</p>
+
+<p><strong>Important:</strong> You may not use slicing or the <code>split</code>, <code>find</code>, or <code>index</code>
+methods of a string. Solve the problem using list operations.</p>
+
+<p><strong>Reminder:</strong> <code>s[&#x2d;1]</code> evaluates to the last element of a sequence <code>s</code>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="word_rope-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-word_rope-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-word_rope-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-word_rope-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def word_rope(s):\n    &quot;&quot;&quot;Return a rope of the words in string s.\n\n    &gt;&gt;&gt; word_rope(&#x27;the last week&#x27;)\n    [&#x27;t&#x27;, &#x27;h&#x27;, &#x27;e&#x27;, [&#x27;l&#x27;, &#x27;a&#x27;, &#x27;s&#x27;, &#x27;t&#x27;, [&#x27;w&#x27;, &#x27;e&#x27;, &#x27;e&#x27;, &#x27;k&#x27;]]]\n    &quot;&quot;&quot;\n    assert s and s[0] != &#x27; &#x27; and s[&#x2d;1] != [ ]\n    result = []\n    word = _____\n    for x in s:\n        if x == &#x27; &#x27;:\n            "*** YOUR CODE HERE ***"\n        else:\n            "*** YOUR CODE HERE ***"\n    return result\n', "python", "word_rope-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def word_rope(s):
+    &quot;&quot;&quot;Return a rope of the words in string s.
+
+    &gt;&gt;&gt; word_rope(&#x27;the last week&#x27;)
+    [&#x27;t&#x27;, &#x27;h&#x27;, &#x27;e&#x27;, [&#x27;l&#x27;, &#x27;a&#x27;, &#x27;s&#x27;, &#x27;t&#x27;, [&#x27;w&#x27;, &#x27;e&#x27;, &#x27;e&#x27;, &#x27;k&#x27;]]]
+    &quot;&quot;&quot;
+    assert s and s[0] != &#x27; &#x27; and s[&#x2d;1] != [ ]
+    result = []
+    word = result
+    for x in s:
+        if x == &#x27; &#x27;:
+            word.append([])
+            word = word[&#x2d;1]
+        else:
+            word.append(x)
+    return result</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Implementation<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+In this implementation, <code>result</code> is a rope and <code>word</code> is a list within that rope which is still being constructed. When <code>x</code> is a space, add an empty list to the end of <code>word</code> and assign <code>word</code> to this empty list. Otherwise, add <code>x</code> to the end of <code>word</code>.
+</div>
+
+
+<h1 id="linked-lists">Linked Lists</h1>
+
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Reminder: Linked Lists<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+A linked list is a <code>Link</code> object or <code>Link.empty</code>.
+
+<p>You can mutate a <code>Link</code> object <code>s</code> in two ways:</p>
+
+<ul>
+  <li>Change the first element with <code>s.first = ...</code></li>
+  <li>Change the rest of the elements with <code>s.rest = ...</code></li>
+</ul>
+
+<p>You can make a new <code>Link</code> object by calling <code>Link</code>:</p>
+
+<ul>
+  <li><code>Link(4)</code> makes a linked list of length 1 containing 4.</li>
+  <li><code>Link(4, s)</code> makes a linked list that starts with 4 followed by the elements of linked list <code>s</code>.
+  </div></li>
+</ul>
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Link Class<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+
+<pre><code>class Link:
+    &quot;&quot;&quot;A linked list is either a Link object or Link.empty
+
+    &gt;&gt;&gt; s = Link(3, Link(4, Link(5)))
+    &gt;&gt;&gt; s.rest
+    Link(4, Link(5))
+    &gt;&gt;&gt; s.rest.rest.rest is Link.empty
+    True
+    &gt;&gt;&gt; s.rest.first * 2
+    8
+    &gt;&gt;&gt; print(s)
+    &lt;3 4 5&gt;
+    &quot;&quot;&quot;
+    empty = ()
+
+    def __init__(self, first, rest=empty):
+        assert rest is Link.empty or isinstance(rest, Link)
+        self.first = first
+        self.rest = rest
+
+    def __repr__(self):
+        if self.rest:
+            rest_repr = &#x27;, &#x27; + repr(self.rest)
+        else:
+            rest_repr = &#x27;&#x27;
+        return &#x27;Link(&#x27; + repr(self.first) + rest_repr + &#x27;)&#x27;
+
+    def __str__(self):
+        string = &#x27;&lt;&#x27;
+        while self.rest is not Link.empty:
+            string += str(self.first) + &#x27; &#x27;
+            self = self.rest
+        return string + str(self.first) + &#x27;&gt;&#x27;</code></pre>
+
+
+
+</div>
+
+
+<h3 id="q2-linear-sublists">Q2: Linear Sublists</h3>
+
+
+<p><strong>Definition:</strong> A <em>sublist</em> of linked list <code>s</code> is a linked list of some of the
+elements of <code>s</code> in order. For example, <code>&lt;3 6 2 5 1 7&gt;</code> has sublists <code>&lt;3 2 1&gt;</code>
+and <code>&lt;6 2 7&gt;</code> but not <code>&lt;5 6 7&gt;</code>.</p>
+
+<p><strong>Definition:</strong> A <em>linear sublist</em> of a linked list of numbers <code>s</code> is a sublist
+in which the difference between adjacent numbers is always the same. For example
+<code>&lt;2 4 6 8&gt;</code> is a linear sublist of <code>&lt;1 2 3 4 6 9 1 8 5&gt;</code> because the difference
+between each pair of adjacent elements is 2.</p>
+
+<p>Implement <code>linear</code> which takes a linked list of numbers <code>s</code> (either a <code>Link</code>
+instance or <code>Link.empty</code>). It returns the longest linear sublist of <code>s</code>. If two
+linear sublists are tied for the longest, return either one.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="linear-input" style="height:720px;"></div>
+            <a href="javascript:void" id="modal-link-linear-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-linear-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-linear-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def linear(s):\n    &quot;&quot;&quot;Return the longest linear sublist of a linked list s.\n\n    &gt;&gt;&gt; s = Link(9, Link(4, Link(6, Link(7, Link(8, Link(10))))))\n    &gt;&gt;&gt; linear(s)\n    Link(4, Link(6, Link(8, Link(10))))\n    &gt;&gt;&gt; linear(Link(4, Link(5, s)))\n    Link(4, Link(5, Link(6, Link(7, Link(8)))))\n    &gt;&gt;&gt; linear(Link(4, Link(5, Link(4, Link(7, Link(3, Link(2, Link(8))))))))\n    Link(5, Link(4, Link(3, Link(2))))\n    &quot;&quot;&quot;\n    def complete(first, rest):\n        &quot;The longest linear sublist of Link(first, rest) with difference d.&quot;\n        if rest is Link.empty:\n            return ____\n        elif ____ == d:\n            return Link(____, complete(____, ____))\n        else:\n            return complete(first, rest.rest)\n    if s is Link.empty:\n        return s\n    longest = Link(s.first) # The longest linear sublist found so far\n    while s is not Link.empty:\n        t = s.rest\n        while t is not Link.empty:\n            d = t.first &#x2d; s.first\n            candidate = ____\n            if length(candidate) &gt; length(longest):\n                longest = candidate\n            t = t.rest\n        s = s.rest\n    return longest\n\ndef length(s):\n    if s is Link.empty:\n        return 0\n    else:\n        return 1 + length(s.rest)\n', "python", "linear-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def linear(s):
+    &quot;&quot;&quot;Return the longest linear sublist of a linked list s.
+
+    &gt;&gt;&gt; s = Link(9, Link(4, Link(6, Link(7, Link(8, Link(10))))))
+    &gt;&gt;&gt; linear(s)
+    Link(4, Link(6, Link(8, Link(10))))
+    &gt;&gt;&gt; linear(Link(4, Link(5, s)))
+    Link(4, Link(5, Link(6, Link(7, Link(8)))))
+    &gt;&gt;&gt; linear(Link(4, Link(5, Link(4, Link(7, Link(3, Link(2, Link(8))))))))
+    Link(5, Link(4, Link(3, Link(2))))
+    &quot;&quot;&quot;
+    def complete(first, rest):
+        &quot;The longest linear sublist of Link(first, rest) with difference d.&quot;
+        if rest is Link.empty:
+            return Link(first, rest)
+        elif rest.first &#x2d; first == d:
+            return Link(first, complete(rest.first, rest.rest))
+        else:
+            return complete(first, rest.rest)
+    if s is Link.empty:
+        return s
+    longest = Link(s.first) # The longest linear sublist found so far
+    while s is not Link.empty:
+        t = s.rest
+        while t is not Link.empty:
+            d = t.first &#x2d; s.first
+            candidate = Link(s.first, complete(t.first, t.rest))
+            if length(candidate) &gt; length(longest):
+                longest = candidate
+            t = t.rest
+        s = s.rest
+    return longest
+
+def length(s):
+    if s is Link.empty:
+        return 0
+    else:
+        return 1 + length(s.rest)</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-5' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: complete function<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-5">
+There are three cases:
+
+<ul>
+  <li>If <code>rest</code> is empty, return a one-element list containing just <code>first</code>.</li>
+  <li>If <code>rest.first</code> is in the linear sublist that starts with <code>first</code>, then build a list that contains <code>first</code>, and <code>rest.first</code>.</li>
+  <li>Otherwise, <code>complete(first, rest.rest)</code>.
+  </div></li>
+</ul>
+
+
+        <button id='toggle-6' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: while statement<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-6">
+This while loop is creating a <code>candidate</code> linear sublist for every two possible starting values: <code>s.first</code> and <code>t.first</code>. The rest of the linear sublist must be in <code>t.rest</code>.
+</div>
+
+
+<h1 id="scheme">Scheme</h1>
+
+
+
+<h3 id="q3-increasing-rope">Q3: Increasing Rope</h3>
+
+
+<p><strong>Definition:</strong> A <em>rope</em> in Scheme is a non-empty list containing only numbers
+except for the last element, which may either be a number or a rope.</p>
+
+<p>Implement <code>up</code>, a Scheme procedure that takes a positive integer <code>n</code>. It returns
+a rope containing the digits of <code>n</code> that is the shortest rope in which each pair
+of adjacent numbers in the same list are in increasing order.</p>
+
+<p><strong>Reminder</strong>: the <code>quotient</code> procedure performs floor division, like <code>//</code> in
+Python. The <code>remainder</code> procedure is like <code>%</code> in Python.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="up-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-up-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-up-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-up-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (up n)\n  (define (helper n result)\n    (if (zero? n) result\n      (helper\n        (quotient n 10)\n        (let ((first (remainder n 10)))\n          'YOUR-CODE-HERE\n          ))))\n  (helper\n    (quotient n 10)\n    'YOUR-CODE-HERE\n    ))\n\n(expect (up 314152667899) &#x27;(3 (1 4 (1 5 (2 6 (6 7 8 9 (9)))))))\n", "scheme", "up-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (up n)
+  (define (helper n result)
+    (if (zero? n) result
+      (helper
+        (quotient n 10)
+        (let ((first (remainder n 10)))
+          (if (&lt; first (car result))
+              (cons first result)
+              (list first result))
+          ))))
+  (helper
+    (quotient n 10)
+    (list (remainder n 10))
+    ))
+
+(expect (up 314152667899) &#x27;(3 (1 4 (1 5 (2 6 (6 7 8 9 (9)))))))</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-7' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: defining helper<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-7">
+Compare <code>first</code> to <code>(car result)</code> to decide whether to <code>cons</code> the value <code>first</code> onto the <code>result</code> or whether to form a new list that contains <code>first</code> and <code>result</code> as elements.
+</div>
+
+
+        <button id='toggle-8' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: calling helper<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-8">
+To correctly call <code>helper</code> from within <code>up</code>, build a rope that only contains the last digit of <code>n</code>: <code>(remainder n 10)</code>.
+</div>
+
+
+<h1 id="sql">SQL</h1>
+
+
+
+        <button id='toggle-9' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Reminder: Writing SELECT Statements<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-9">
+A <code>SELECT</code> statement describes an output table based on input rows. To write one:
+
+<ol>
+  <li>Describe the <strong>input rows</strong> using <code>FROM</code> and <code>WHERE</code> clauses.</li>
+  <li><strong>Group</strong> those rows and determine which groups should appear as output rows using <code>GROUP BY</code> and <code>HAVING</code> clauses.</li>
+  <li>Format and order the <strong>output rows</strong> and columns using <code>SELECT</code> and <code>ORDER BY</code> clauses.</li>
+</ol>
+
+<p><code>SELECT</code> <em>(Step 3)</em> <code>FROM</code> <em>(Step 1)</em> <code>WHERE</code> <em>(Step 1)</em> <code>GROUP BY</code> <em>(Step 2)</em> <code>HAVING</code> <em>(Step 2)</em> <code>ORDER BY</code> <em>(Step 3)</em>;</p>
+
+<p>Step 1 may involve joining tables (using commas) to form input rows that consist of two or more rows from existing tables.</p>
+
+<p>The <code>WHERE</code>, <code>GROUP BY</code>, <code>HAVING</code>, and <code>ORDER BY</code> clauses are optional.
+</div></p>
+
+
+<h3 id="q4-a-secret-message">Q4: A Secret Message</h3>
+
+
+<p>A substitution cipher replaces each word with another word in a table in order
+to encrypt a message. To decode an encrypted message, replace each word <code>x</code> with
+its corresponding <code>y</code> in a code table.</p>
+
+<p>Write a select statement to decode the <code>original</code> message <em>It's The End</em>
+using the <code>code</code> table.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="end-input" style="height:396px;"></div>
+            <a href="javascript:void" id="modal-link-end-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-end-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-end-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('CREATE TABLE original AS\n  SELECT 1 AS n, &quot;It&#x27;s&quot; AS word UNION\n  SELECT 2     , &quot;The&quot;      UNION\n  SELECT 3     , &quot;End&quot;;\n\nCREATE TABLE code AS\n  SELECT &quot;Up&quot; AS x, &quot;Down&quot; AS y UNION\n  SELECT &quot;Now&quot;    , &quot;Home&quot; UNION\n  SELECT &quot;It&#x27;s&quot;   , &quot;What&quot; UNION\n  SELECT &quot;See&quot;    , &quot;Do&quot; UNION\n  SELECT &quot;Can&quot;    , &quot;See&quot; UNION\n  SELECT &quot;End&quot;    , &quot;Now&quot; UNION\n  SELECT &quot;What&quot;   , &quot;You&quot; UNION\n  SELECT &quot;The&quot;    , &quot;Happens&quot; UNION\n  SELECT &quot;Love&quot;   , &quot;Scheme&quot; UNION\n  SELECT &quot;Not&quot;    , &quot;Mess&quot; UNION\n  SELECT &quot;Happens&quot;, &quot;Go&quot;;\n\nSELECT "REPLACE THIS LINE WITH YOUR SOLUTION";\n\n', "sql", "end-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>CREATE TABLE original AS
+  SELECT 1 AS n, &quot;It&#x27;s&quot; AS word UNION
+  SELECT 2     , &quot;The&quot;      UNION
+  SELECT 3     , &quot;End&quot;;
+
+CREATE TABLE code AS
+  SELECT &quot;Up&quot; AS x, &quot;Down&quot; AS y UNION
+  SELECT &quot;Now&quot;    , &quot;Home&quot; UNION
+  SELECT &quot;It&#x27;s&quot;   , &quot;What&quot; UNION
+  SELECT &quot;See&quot;    , &quot;Do&quot; UNION
+  SELECT &quot;Can&quot;    , &quot;See&quot; UNION
+  SELECT &quot;End&quot;    , &quot;Now&quot; UNION
+  SELECT &quot;What&quot;   , &quot;You&quot; UNION
+  SELECT &quot;The&quot;    , &quot;Happens&quot; UNION
+  SELECT &quot;Love&quot;   , &quot;Scheme&quot; UNION
+  SELECT &quot;Not&quot;    , &quot;Mess&quot; UNION
+  SELECT &quot;Happens&quot;, &quot;Go&quot;;
+
+SELECT y FROM original, code WHERE word=x ORDER BY n;
+</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-10' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: first message<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-10">
+
+<p>Join the <code>original</code> and <code>code</code> tables and make sure that the joined roles have
+the same <code>word</code> and <code>x</code>.</p>
+
+</div>
+
+<p>What happens now? Write another select statement to decode this encrypted
+message using the same <code>code</code> table.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="home-input" style="height:450px;"></div>
+            <a href="javascript:void" id="modal-link-home-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-home-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-home-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('CREATE TABLE original AS\n  SELECT 1 AS n, &quot;It&#x27;s&quot; AS word UNION\n  SELECT 2     , &quot;The&quot;      UNION\n  SELECT 3     , &quot;End&quot;;\n\nCREATE TABLE code AS\n  SELECT &quot;Up&quot; AS x, &quot;Down&quot; AS y UNION\n  SELECT &quot;Now&quot;    , &quot;Home&quot; UNION\n  SELECT &quot;It&#x27;s&quot;   , &quot;What&quot; UNION\n  SELECT &quot;See&quot;    , &quot;Do&quot; UNION\n  SELECT &quot;Can&quot;    , &quot;See&quot; UNION\n  SELECT &quot;End&quot;    , &quot;Now&quot; UNION\n  SELECT &quot;What&quot;   , &quot;You&quot; UNION\n  SELECT &quot;The&quot;    , &quot;Happens&quot; UNION\n  SELECT &quot;Love&quot;   , &quot;Scheme&quot; UNION\n  SELECT &quot;Not&quot;    , &quot;Mess&quot; UNION\n  SELECT &quot;Happens&quot;, &quot;Go&quot;;\n\nSELECT "REPLACE THIS LINE WITH YOUR SOLUTION";\n\n', "sql", "home-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>CREATE TABLE original AS
+  SELECT 1 AS n, &quot;It&#x27;s&quot; AS word UNION
+  SELECT 2     , &quot;The&quot;      UNION
+  SELECT 3     , &quot;End&quot;;
+
+CREATE TABLE code AS
+  SELECT &quot;Up&quot; AS x, &quot;Down&quot; AS y UNION
+  SELECT &quot;Now&quot;    , &quot;Home&quot; UNION
+  SELECT &quot;It&#x27;s&quot;   , &quot;What&quot; UNION
+  SELECT &quot;See&quot;    , &quot;Do&quot; UNION
+  SELECT &quot;Can&quot;    , &quot;See&quot; UNION
+  SELECT &quot;End&quot;    , &quot;Now&quot; UNION
+  SELECT &quot;What&quot;   , &quot;You&quot; UNION
+  SELECT &quot;The&quot;    , &quot;Happens&quot; UNION
+  SELECT &quot;Love&quot;   , &quot;Scheme&quot; UNION
+  SELECT &quot;Not&quot;    , &quot;Mess&quot; UNION
+  SELECT &quot;Happens&quot;, &quot;Go&quot;;
+
+SELECT b.y
+  FROM original, code AS a, code AS b
+  WHERE word=a.x AND a.y=b.x
+  ORDER BY n;
+</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-11' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: second message<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-11">
+
+<p>Join <code>original</code> with <code>code AS a</code> and <code>code AS b</code> to create six-column rows like:
+<code>2|The|The|Happens|Happens|Go</code>, The <em>Go</em> at the end is part of the decoded message.</p>
+
+</div>
+
+<p><strong>Scheduling time:</strong> This is the last discussion, but you could schedule a
+meeting with your group next week to study for the exam. Your regular discussion
+room and time should be available during RRR week if you want to use it.</p>
+
+
+<h1 id="document-the-occasion">Document the Occasion</h1>
+
+
+<p>Please all fill out the <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqlK8l6WkScGr-RHR-kM4p5bnR9cllYrG95fDqPJspSlll7A/viewform">attendance form</a> (one submission per person per week).</p>
+
+<p><strong>Important:</strong> Please help put the furniture in the room back where you found it before you leave. Thanks!</p>
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#getting-started">Getting Started</a></li>
+  <li><a href="index.html#lists">Lists</a></li>
+  <ul>
+    <li><a href="index.html#q1-word-rope">Q1: Word Rope</a></li>
+  </ul>
+  <li><a href="index.html#linked-lists">Linked Lists</a></li>
+  <ul>
+    <li><a href="index.html#q2-linear-sublists">Q2: Linear Sublists</a></li>
+  </ul>
+  <li><a href="index.html#scheme">Scheme</a></li>
+  <ul>
+    <li><a href="index.html#q3-increasing-rope">Q3: Increasing Rope</a></li>
+  </ul>
+  <li><a href="index.html#sql">SQL</a></li>
+  <ul>
+    <li><a href="index.html#q4-a-secret-message">Q4: A Secret Message</a></li>
+  </ul>
+  <li><a href="index.html#document-the-occasion">Document the Occasion</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="../../index.html">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="https://cs61a.org/weekly">Weekly Schedule</a></li>
+            <li><a href="../../office-hours.html">Office Hours</a></li>
+            <li><a href="../../staff.html">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="../../resources.html">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="../../articles/studying.html">Studying Guide</a></li>
+            <li><a href="../../articles/debugging.html">Debugging Guide</a></li>
+            <li><a href="../../articles/composition.html">Composition Guide</a></li>
+            <li><a href="../../articles/pair-programming.html">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="../../articles/about.html">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="../../articles/about.html#assignments">Assignments</a></li>
+            <li><a href="../../articles/about.html#exams">Exams</a></li>
+            <li><a href="../../articles/about.html#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>
